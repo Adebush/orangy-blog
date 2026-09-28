@@ -1,0 +1,554 @@
+@import "tailwindcss";
+@plugin "@tailwindcss/typography";
+
+/* 用 class 控制暗色模式（配合 next-themes 之外的轻量实现） */
+@custom-variant dark (&:where(.dark, .dark *));
+
+@theme {
+  --font-sans: var(--font-inter), ui-sans-serif, system-ui, -apple-system, "Segoe UI",
+    "PingFang SC", "Hiragino Sans GB", "Microsoft YaHei", "Noto Sans SC", sans-serif;
+  --font-mono: var(--font-mono-stack), ui-monospace, SFMono-Regular, "SF Mono", Menlo,
+    Consolas, "Liberation Mono", monospace;
+
+  /* 品牌色：柔粉玫瑰 */
+  --color-brand-50: #fff5f8;
+  --color-brand-100: #ffe8f0;
+  --color-brand-200: #ffd0e0;
+  --color-brand-300: #ffaac7;
+  --color-brand-400: #f980a8;
+  --color-brand-500: #e8578a;
+  --color-brand-600: #c9306a;
+  --color-brand-700: #a02355;
+  --color-brand-800: #7d1e44;
+  --color-brand-900: #5d1733;
+
+  --radius-4xl: 2rem;
+
+  --animate-fade-up: fade-up 0.7s cubic-bezier(0.16, 1, 0.3, 1) both;
+  --animate-fade-in: fade-in 0.8s ease both;
+  --animate-blob: blob 22s ease-in-out infinite;
+  --animate-float: float 7s ease-in-out infinite;
+  --animate-shimmer: shimmer 2.2s linear infinite;
+  --animate-spin-slow: spin 14s linear infinite;
+
+  @keyframes fade-up {
+    from {
+      opacity: 0;
+      transform: translateY(18px);
+    }
+    to {
+      opacity: 1;
+      transform: none;
+    }
+  }
+  @keyframes fade-in {
+    from {
+      opacity: 0;
+    }
+    to {
+      opacity: 1;
+    }
+  }
+  @keyframes blob {
+    0%,
+    100% {
+      transform: translate(0, 0) scale(1);
+    }
+    33% {
+      transform: translate(6%, -8%) scale(1.12);
+    }
+    66% {
+      transform: translate(-7%, 6%) scale(0.92);
+    }
+  }
+  @keyframes float {
+    0%,
+    100% {
+      transform: translateY(0);
+    }
+    50% {
+      transform: translateY(-10px);
+    }
+  }
+  @keyframes shimmer {
+    0% {
+      background-position: -200% 0;
+    }
+    100% {
+      background-position: 200% 0;
+    }
+  }
+}
+
+/* ============================================================
+   玻璃拟态设计变量
+   ============================================================ */
+@layer base {
+  :root {
+    color-scheme: light;
+    /* 浅色：浅粉 → 白 的渐变底 */
+    --page-bg: #fffbfc;
+    --page-bg-2: #ffdce8;
+
+    --glass-bg: rgba(255, 255, 255, 0.6);
+    --glass-bg-strong: rgba(255, 255, 255, 0.8);
+    --glass-bg-soft: rgba(255, 255, 255, 0.4);
+    --glass-border: rgba(255, 255, 255, 0.78);
+    --glass-shadow: 0 8px 32px rgba(150, 80, 110, 0.09), 0 1px 2px rgba(150, 80, 110, 0.05);
+    --glass-shadow-lg: 0 24px 64px rgba(150, 80, 110, 0.15), 0 2px 6px rgba(150, 80, 110, 0.05);
+    --glass-highlight: rgba(255, 255, 255, 0.92);
+
+    --ink: #2a1c24;
+    --ink-soft: #5f4d57;
+    --ink-muted: #937f8a;
+
+    --grid-line: rgba(150, 80, 110, 0.05);
+  }
+
+  .dark {
+    color-scheme: dark;
+    /* 深色：深紫 → 黑 的渐变底 */
+    --page-bg: #08060e;
+    --page-bg-2: #2b1147;
+
+    --glass-bg: rgba(255, 255, 255, 0.055);
+    --glass-bg-strong: rgba(255, 255, 255, 0.09);
+    --glass-bg-soft: rgba(255, 255, 255, 0.03);
+    --glass-border: rgba(255, 255, 255, 0.11);
+    --glass-shadow: 0 8px 32px rgba(0, 0, 0, 0.5), 0 1px 2px rgba(0, 0, 0, 0.35);
+    --glass-shadow-lg: 0 24px 64px rgba(0, 0, 0, 0.65), 0 2px 6px rgba(0, 0, 0, 0.4);
+    --glass-highlight: rgba(255, 255, 255, 0.15);
+
+    --ink: #ece8f2;
+    --ink-soft: #b4adc4;
+    --ink-muted: #877f9c;
+
+    --grid-line: rgba(255, 255, 255, 0.035);
+  }
+
+  * {
+    border-color: var(--glass-border);
+  }
+
+  html {
+    scroll-behavior: smooth;
+    -webkit-tap-highlight-color: transparent;
+  }
+
+  body {
+    background-color: var(--page-bg);
+    color: var(--ink);
+    font-family: var(--font-sans);
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+    min-height: 100dvh;
+    overflow-x: hidden;
+  }
+
+  ::selection {
+    background: var(--color-brand-500);
+    color: #fff;
+  }
+
+  /* 滚动条 */
+  ::-webkit-scrollbar {
+    width: 10px;
+    height: 10px;
+  }
+  ::-webkit-scrollbar-track {
+    background: transparent;
+  }
+  ::-webkit-scrollbar-thumb {
+    background: color-mix(in srgb, var(--ink-muted) 35%, transparent);
+    border-radius: 99px;
+    border: 2px solid transparent;
+    background-clip: content-box;
+  }
+  ::-webkit-scrollbar-thumb:hover {
+    background: color-mix(in srgb, var(--color-brand-500) 65%, transparent);
+    background-clip: content-box;
+  }
+
+  a {
+    color: inherit;
+  }
+
+  :focus-visible {
+    outline: 2px solid var(--color-brand-500);
+    outline-offset: 2px;
+    border-radius: 6px;
+  }
+}
+
+/* ============================================================
+   玻璃工具类
+   ============================================================ */
+@utility glass {
+  background: var(--glass-bg);
+  -webkit-backdrop-filter: blur(20px) saturate(180%);
+  backdrop-filter: blur(20px) saturate(180%);
+  border: 1px solid var(--glass-border);
+  box-shadow: var(--glass-shadow);
+}
+
+@utility glass-strong {
+  background: var(--glass-bg-strong);
+  -webkit-backdrop-filter: blur(28px) saturate(190%);
+  backdrop-filter: blur(28px) saturate(190%);
+  border: 1px solid var(--glass-border);
+  box-shadow: var(--glass-shadow-lg);
+}
+
+@utility glass-soft {
+  background: var(--glass-bg-soft);
+  -webkit-backdrop-filter: blur(14px) saturate(160%);
+  border: 1px solid var(--glass-border);
+}
+
+/* ⚠️ Tailwind v4 在处理 @utility 时会把 backdrop-filter 的前缀写法与标准写法合并，
+   只保留 -webkit- 那一条，导致标准属性丢失。
+   这里用普通 CSS 显式补上标准属性（两者是不同的属性名，不会互相覆盖：
+   现代浏览器用标准的，旧 WebKit 用带前缀的）。 */
+@layer components {
+  .glass {
+    -webkit-backdrop-filter: blur(20px) saturate(180%);
+    backdrop-filter: blur(20px) saturate(180%);
+  }
+  .glass-strong {
+    -webkit-backdrop-filter: blur(28px) saturate(190%);
+    backdrop-filter: blur(28px) saturate(190%);
+  }
+  .glass-soft {
+    -webkit-backdrop-filter: blur(14px) saturate(160%);
+    backdrop-filter: blur(14px) saturate(160%);
+  }
+}
+
+/* 顶部高光，让玻璃更像玻璃 */
+@utility glass-sheen {
+  position: relative;
+  isolation: isolate;
+  &::before {
+    content: "";
+    position: absolute;
+    inset: 0 0 auto 0;
+    height: 1px;
+    background: linear-gradient(
+      90deg,
+      transparent,
+      var(--glass-highlight) 22%,
+      var(--glass-highlight) 78%,
+      transparent
+    );
+    border-radius: inherit;
+    pointer-events: none;
+  }
+}
+
+@utility glass-hover {
+  transition:
+    transform 0.35s cubic-bezier(0.16, 1, 0.3, 1),
+    box-shadow 0.35s ease,
+    background 0.35s ease,
+    border-color 0.35s ease;
+  &:hover {
+    transform: translateY(-4px);
+    background: var(--glass-bg-strong);
+    box-shadow: var(--glass-shadow-lg);
+    border-color: color-mix(in srgb, var(--color-brand-500) 45%, var(--glass-border));
+  }
+}
+
+@utility text-ink {
+  color: var(--ink);
+}
+@utility text-soft {
+  color: var(--ink-soft);
+}
+@utility text-muted {
+  color: var(--ink-muted);
+}
+
+@utility no-scrollbar {
+  scrollbar-width: none;
+  &::-webkit-scrollbar {
+    display: none;
+  }
+}
+
+/* 渐变文字：同色系深浅过渡，不用彩虹渐变 */
+@utility text-gradient {
+  background: linear-gradient(112deg, var(--color-brand-600), var(--color-brand-400) 78%);
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+}
+
+/* ============================================================
+   文章正文（Markdown 渲染结果）样式
+   ============================================================ */
+@layer components {
+  .article-prose {
+    color: var(--ink-soft);
+    line-height: 1.9;
+    font-size: 1.0125rem;
+    word-wrap: break-word;
+  }
+  .article-prose > *:first-child {
+    margin-top: 0;
+  }
+  .article-prose h1,
+  .article-prose h2,
+  .article-prose h3,
+  .article-prose h4 {
+    color: var(--ink);
+    font-weight: 700;
+    letter-spacing: -0.015em;
+    scroll-margin-top: 6rem;
+    margin-top: 2.2em;
+    margin-bottom: 0.8em;
+    line-height: 1.35;
+  }
+  .article-prose h1 {
+    font-size: 1.75rem;
+  }
+  .article-prose h2 {
+    font-size: 1.45rem;
+    padding-bottom: 0.45rem;
+    border-bottom: 1px solid var(--glass-border);
+  }
+  .article-prose h2::before {
+    content: "";
+    display: inline-block;
+    width: 4px;
+    height: 1.05em;
+    margin-right: 0.6rem;
+    vertical-align: -0.14em;
+    border-radius: 99px;
+    background: linear-gradient(180deg, var(--color-brand-400), var(--color-brand-600));
+  }
+  .article-prose h3 {
+    font-size: 1.2rem;
+  }
+  .article-prose h4 {
+    font-size: 1.05rem;
+  }
+  .article-prose p {
+    margin: 1.1em 0;
+  }
+  .article-prose a {
+    color: var(--color-brand-600);
+    text-decoration: none;
+    border-bottom: 1px solid color-mix(in srgb, var(--color-brand-500) 40%, transparent);
+    transition: all 0.2s ease;
+  }
+  .article-prose a:hover {
+    color: var(--color-brand-500);
+    border-bottom-color: var(--color-brand-500);
+    background: color-mix(in srgb, var(--color-brand-500) 10%, transparent);
+  }
+  .article-prose strong {
+    color: var(--ink);
+    font-weight: 650;
+  }
+  .article-prose ul,
+  .article-prose ol {
+    margin: 1.1em 0;
+    padding-left: 1.5em;
+  }
+  .article-prose ul {
+    list-style: disc;
+  }
+  .article-prose ol {
+    list-style: decimal;
+  }
+  .article-prose li {
+    margin: 0.45em 0;
+  }
+  .article-prose li::marker {
+    color: var(--color-brand-500);
+  }
+  .article-prose blockquote {
+    margin: 1.4em 0;
+    padding: 0.2em 1.1em;
+    border-left: 3px solid var(--color-brand-500);
+    border-radius: 0 12px 12px 0;
+    background: var(--glass-bg-soft);
+    color: var(--ink-soft);
+    font-style: normal;
+  }
+  .article-prose blockquote p {
+    margin: 0.6em 0;
+  }
+  .article-prose hr {
+    margin: 2.4em 0;
+    border: 0;
+    height: 1px;
+    background: linear-gradient(90deg, transparent, var(--glass-border), transparent);
+  }
+  .article-prose img {
+    border-radius: 16px;
+    margin: 1.6em auto;
+    max-width: 100%;
+    box-shadow: var(--glass-shadow);
+    display: block;
+  }
+  .article-prose code {
+    font-family: var(--font-mono);
+    font-size: 0.875em;
+    padding: 0.18em 0.42em;
+    border-radius: 6px;
+    background: color-mix(in srgb, var(--color-brand-500) 12%, transparent);
+    color: var(--color-brand-700);
+    border: 1px solid color-mix(in srgb, var(--color-brand-500) 16%, transparent);
+  }
+  .dark .article-prose code {
+    color: var(--color-brand-300);
+  }
+  .article-prose pre {
+    margin: 1.5em 0;
+    padding: 1.1rem 1.25rem;
+    border-radius: 16px;
+    overflow-x: auto;
+    background: #130f1c;
+    border: 1px solid rgba(255, 255, 255, 0.09);
+    box-shadow: var(--glass-shadow);
+    font-size: 0.875rem;
+    line-height: 1.7;
+  }
+  .article-prose pre code {
+    background: none;
+    border: 0;
+    padding: 0;
+    color: #e6e1ee;
+    font-size: inherit;
+  }
+  .article-prose table {
+    width: 100%;
+    margin: 1.5em 0;
+    border-collapse: separate;
+    border-spacing: 0;
+    font-size: 0.925rem;
+    border: 1px solid var(--glass-border);
+    border-radius: 14px;
+    overflow: hidden;
+    display: table;
+  }
+  .article-prose thead {
+    background: var(--glass-bg-soft);
+  }
+  .article-prose th,
+  .article-prose td {
+    padding: 0.65rem 0.9rem;
+    text-align: left;
+    border-bottom: 1px solid var(--glass-border);
+  }
+  .article-prose th {
+    color: var(--ink);
+    font-weight: 650;
+  }
+  .article-prose tbody tr:last-child td {
+    border-bottom: 0;
+  }
+  .article-prose tbody tr:hover {
+    background: var(--glass-bg-soft);
+  }
+  .article-prose .task-list-item {
+    list-style: none;
+    margin-left: -1.2em;
+  }
+  .article-prose input[type="checkbox"] {
+    margin-right: 0.5em;
+    accent-color: var(--color-brand-500);
+  }
+  /* KaTeX 公式 */
+  .article-prose .katex-display {
+    overflow-x: auto;
+    overflow-y: hidden;
+    padding: 0.6em 0;
+  }
+
+  /* 代码高亮（highlight.js 主题，暖色调） */
+  .hljs-comment,
+  .hljs-quote {
+    color: #7d7a8c;
+    font-style: italic;
+  }
+  .hljs-keyword,
+  .hljs-selector-tag,
+  .hljs-literal,
+  .hljs-doctag {
+    color: #ff8fb1;
+  }
+  .hljs-string,
+  .hljs-regexp,
+  .hljs-addition {
+    color: #9ae6a0;
+  }
+  .hljs-number,
+  .hljs-built_in,
+  .hljs-symbol {
+    color: #ffb877;
+  }
+  .hljs-title,
+  .hljs-section,
+  .hljs-name,
+  .hljs-title.function_ {
+    color: #7cc7ff;
+  }
+  .hljs-attr,
+  .hljs-attribute,
+  .hljs-variable,
+  .hljs-template-variable {
+    color: #ffd479;
+  }
+  .hljs-type,
+  .hljs-class .hljs-title {
+    color: #63e6d2;
+  }
+  .hljs-meta,
+  .hljs-deletion {
+    color: #ff7a7a;
+  }
+  .hljs-emphasis {
+    font-style: italic;
+  }
+  .hljs-strong {
+    font-weight: 700;
+  }
+}
+
+/* ============================================================
+   主页弹幕留言
+   ============================================================ */
+@keyframes danmaku-fly {
+  from {
+    transform: translateX(0);
+  }
+  to {
+    /* 从容器右缘一路划到左缘之外 */
+    transform: translateX(calc(-100vw - 100%));
+  }
+}
+
+/* 每条弹幕都从容器右侧外面起步 */
+.danmaku-item {
+  position: absolute;
+  left: 100%;
+  white-space: nowrap;
+  will-change: transform;
+}
+
+/* 鼠标悬停时整条轨道暂停，方便看清内容（由父元素加类控制） */
+.danmaku-paused .danmaku-item {
+  animation-play-state: paused !important;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .danmaku-item {
+    animation: none !important;
+    position: static;
+    display: inline-block;
+    margin: 0 0.75rem 0.5rem 0;
+  }
+}

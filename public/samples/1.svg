@@ -1,0 +1,30 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 900 640" width="900" height="640">
+  <defs>
+    <linearGradient id="bg" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0%" stop-color="#ffd9e6"/><stop offset="50%" stop-color="#f980a8"/><stop offset="100%" stop-color="#c9306a"/>
+    </linearGradient>
+    <filter id="soft" x="-30%" y="-30%" width="160%" height="160%"><feGaussianBlur stdDeviation="70"/></filter>
+    <radialGradient id="vig" cx="50%" cy="45%" r="72%">
+      <stop offset="60%" stop-color="#000" stop-opacity="0"/><stop offset="100%" stop-color="#000" stop-opacity="0.32"/>
+    </radialGradient>
+  </defs>
+  <rect width="100%" height="100%" fill="url(#bg)"/>
+  <g filter="url(#soft)">
+    <circle cx="28%" cy="44%" r="25%" fill="#ffd9e6" opacity="0.55"/>
+    <circle cx="65%" cy="27%" r="42%" fill="#f980a8" opacity="0.55"/>
+    <circle cx="32%" cy="80%" r="33%" fill="#c9306a" opacity="0.55"/>
+    <circle cx="69%" cy="63%" r="24%" fill="#ffd9e6" opacity="0.55"/>
+  </g>
+  <rect width="100%" height="100%" fill="url(#vig)"/>
+  <g opacity="0.13" stroke="#fff" stroke-width="1.5" fill="none">
+    <path d="M0 64 Q 450 24 900 64"/>
+    <path d="M0 128 Q 450 88 900 128"/>
+    <path d="M0 192 Q 450 152 900 192"/>
+    <path d="M0 256 Q 450 216 900 256"/>
+    <path d="M0 320 Q 450 280 900 320"/>
+    <path d="M0 384 Q 450 344 900 384"/>
+    <path d="M0 448 Q 450 408 900 448"/>
+    <path d="M0 512 Q 450 472 900 512"/>
+    <path d="M0 576 Q 450 536 900 576"/>
+  </g>
+</svg>
